@@ -3,6 +3,7 @@ package zw.co.afrosoft.expensetracker.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -33,6 +34,18 @@ public class MasterController {
     @RequestMapping(value = "expense", method = RequestMethod.POST)
     public String save(@ModelAttribute("expense") Expense expense){
         expenseService.save(expense);
+        return "redirect:/";
+    }
+    @RequestMapping(value = "/expense/{id}")
+    public ModelAndView edit(@PathVariable("id") Long id){
+        ModelAndView mav = new ModelAndView("expense");
+        Expense expense =  expenseService.findById(id);
+        mav.addObject("expense",expense);
+        return mav;
+    }
+    @RequestMapping(value = "/expense/{id}/delete")
+    public String delete(@PathVariable("id") Long id){
+        expenseService.delete(id);
         return "redirect:/";
     }
 }
